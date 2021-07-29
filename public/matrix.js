@@ -146,3 +146,39 @@ Matrix.prototype.copy = function(){
     }
     return result;
 }
+Matrix.prototype.summation = function(){
+    let sum = 0;
+    for(let i=0;i<this.rows;i++){
+        for(let j=0;j<this.cols;j++){
+            sum += this.matrix[i][j];
+        }
+    }
+    return sum;
+}
+Matrix.prototype.subMatrix = function(row,col,height,width){
+    let result = new Matrix(height,width);
+    for(let i=0;i<result.rows;i++){
+        for(let j=0;j<result.cols;j++){
+            if(row+i<this.rows && col+j<this.cols){
+                result.matrix[i][j]=this.matrix[row+i][col+j];
+            }else{
+                result.matrix[i][j]=0;
+            }
+            
+        }
+    }
+    return result;
+};
+
+//the activation function
+function sigmoid(x){
+    return 1 / (1 + Math.exp(-x));
+}
+//to compute the square 2-norm of the error * 1/2
+function distance(vector){
+    let sum = 0;
+    for(i=0;i<vector.rows;i++){
+        sum += vector.matrix[i][0]*vector.matrix[i][0];
+    }
+    return sum/2;
+}

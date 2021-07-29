@@ -1,3 +1,8 @@
 達成效果：
 使用NN有效辨識三種圖片
 NN內部的隱藏層數目可以自由擴展
+
+Conv部份測試ok
+test_conv.html視覺化Conv的結果
+
+尚未整合NN和Conv

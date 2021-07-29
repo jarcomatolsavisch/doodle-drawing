@@ -1,15 +1,15 @@
-//the activation function
-function sigmoid(x){
-    return 1 / (1 + Math.exp(-x));
-}
-//to compute the square 2-norm of the error * 1/2
-function distance(vector){
-    let sum = 0;
-    for(i=0;i<vector.rows;i++){
-        sum += vector.matrix[i][0]*vector.matrix[i][0];
-    }
-    return sum/2;
-}
+// //the activation function
+// function sigmoid(x){
+//     return 1 / (1 + Math.exp(-x));
+// }
+// //to compute the square 2-norm of the error * 1/2
+// function distance(vector){
+//     let sum = 0;
+//     for(i=0;i<vector.rows;i++){
+//         sum += vector.matrix[i][0]*vector.matrix[i][0];
+//     }
+//     return sum/2;
+// }
 //Initiallizing the NN
 /* NeuralNetwork([2,3,3,2]) produces a neural network with
    # input nodes = 2
@@ -43,6 +43,7 @@ NeuralNetwork.prototype.info = function(){
 
 NeuralNetwork.prototype.feedForward = function(inputArray){
     //Generating the hidden outputs
+    console.log(inputArray);
     this.layer[0] = Matrix.fromArray(inputArray);
     //console.log("Feedforwarding");
     //console.log(this.num.length-1);

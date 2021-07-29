@@ -1,0 +1,136 @@
+<html>
+
+<head>
+    <script src="p5.js"></script>
+    <script src="matrix.js"></script>
+    <script src="convolution.js"></script>
+    <script src="test_conv.js"></script>
+</head>
+<style>
+    body {
+        background-color: silver;
+    }
+
+    button {
+        font-size: 12pt;
+        margin: 2px;
+    }
+</style>
+
+<body>
+    <div>
+        Filter:
+        <table>
+            <tr>
+                <td> -1</td>
+                <td> 1</td>
+                <td> 1</td>
+            </tr>
+            <tr>
+                <td> -1</td>
+                <td> 1</td>
+                <td> 1</td>
+            </tr>
+            <tr>
+                <td> -1</td>
+                <td> 1</td>
+                <td> 1</td>
+            </tr>
+        </table>
+        <button id="GridBtn">Grid</button>
+        <button id="ConvBtn">Conv</button>
+        <button id="ClearBtn">Clear</button>
+    </div>
+</body>
+<script>
+    const size = 280;
+    //res stands for the resolution of the grid image
+    let res = 28;
+    //the grid of the picture
+    let input = [];
+    function setup() {
+        createCanvas(size, size);
+        background(255);
+        setGridButton();
+        setConvButton();
+        setClearButton();
+    }
+
+    function draw() {
+        strokeWeight(16);
+        stroke(0);
+        if (mouseIsPressed) {
+            line(pmouseX, pmouseY, mouseX, mouseY);
+        }
+        
+    }
+    function setGridButton() {
+        let button = document.querySelector("#GridBtn");
+        button.onclick = function () {
+            //resolution
+            //use p5.js tool to get the drawing
+            let img = get();
+            img.resize(res, res);
+            img.loadPixels();
+            //console.log(img);
+            for (let i = 0; i < res * res; i++) {
+                input[i] = 1 - (img.pixels[i * 4] / 255.0);
+            }
+            let mat = InputMatrix();
+            showMatGrid(mat);
+        }
+    }
+    function showMatGrid(mat){
+        let square_size=size/mat.rows;
+        if(mat instanceof Matrix){
+            mat.matrix.forEach((row,j) => {
+                row.forEach((elt,i)=>{
+                    strokeWeight(1);
+                    let color = 255 - floor(elt*255);
+                    fill(color);
+                    square(i*square_size,j*square_size,square_size);
+                });
+            });
+        }else{
+            throw new Error("[ERROR]The input should be a matrix.");
+        }
+    }
+    function setConvButton(){
+        let button = document.querySelector("#ConvBtn");
+        button.onclick = function(){
+            
+            if(input.length == 0){
+                alert("[WARNING] Please pressed 'Grid' first.");
+            }
+            else{
+                let mat = InputMatrix();
+                let filter = Matrix.createNewMat([[-1,0,1],
+                                                [-1,0,1], 
+                                                [-1,0,1]]);
+                let result = convolution(mat, filter);
+                console.log(result);
+                showMatGrid(result);
+            }
+        }
+    }
+    //change the input(flatten image array form) into a Matrix form
+    function InputMatrix(){
+        let mat_array = [];
+        for(let i=0;i<res;i++){
+            let begin = i*res;
+            mat_array[i] = input.slice(begin,begin+res);
+        };
+        let mat = Matrix.createNewMat(mat_array);
+        return mat;
+    }
+    function setClearButton() {
+        let button = document.querySelector("#ClearBtn");
+        button.onclick = function () {
+            background(255);
+            input = [];
+            console.log(input);
+        }
+    }
+</script>
+
+</html>
